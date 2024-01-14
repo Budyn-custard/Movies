@@ -14,6 +14,11 @@ namespace Movies.Data.Repository
             _context = context;
         }
 
+        public Task<Movie> GetMovie(string title)
+        {
+            return _context.Movies.FirstOrDefaultAsync(p=>p.Title == title);
+        }
+
         public Task<List<Movie>> GetMovies(Expression<Func<Movie, bool>> predicate, Expression<Func<Movie, bool>> sort, int skip, int take)
         {
             return _context.Movies.Where(predicate).OrderBy(sort).Skip(skip).Take(take).ToListAsync();

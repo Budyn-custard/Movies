@@ -19,9 +19,14 @@ namespace Movies.Application.Services
         {
             _repository = repository;
         }
+
+        public Task<Movie> GetMovie(string title)
+        {
+            return _repository.GetMovie(title);
+        }
+
         public Task<List<Movie>> GetMovies(PageParams pageParams)
         {
-
             if (!PredicateHelper.IsValidColumn(pageParams.OrderBy))
                 throw new BusinessException((int)HttpStatusCode.BadRequest, "Order by is not valid.");
 

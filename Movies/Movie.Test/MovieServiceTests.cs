@@ -3,12 +3,7 @@ using Movies.Application.Services;
 using Movies.Data.Entities;
 using Movies.Data.Repository;
 using Movies.Models.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Movies.Test
 {
@@ -26,6 +21,19 @@ namespace Movies.Test
             var result = await service.GetMovies(new PageParams());
             //assert
             Assert.True(result is  List<Movie>);
+        }
+
+        [Fact]
+        public async Task GetMovie_Returns_Movie()
+        {
+            //arrange
+            Mock<IMovieRepository> repository = new Mock<IMovieRepository>();
+            repository.Setup(p => p.GetMovie(It.IsAny<string>())).ReturnsAsync(new Movie());
+            var service = new MovieService(repository.Object);
+            //act
+            var result = await service.GetMovie(string.Empty);
+            //assert
+            Assert.True(result is Movie);
         }
     }
 }
