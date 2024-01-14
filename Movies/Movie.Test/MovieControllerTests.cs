@@ -1,27 +1,20 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using Moq;
 using Movies.API.Controllers;
 using Movies.Application.Helpers;
 using Movies.Application.Services;
 using Movies.Data.Entities;
 using Movies.Models.Response;
-using Movies.Models.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Movies.Test
 {
-    
+
     public class MovieControllerTests
     {        
         [Fact]
-        public async Task GetMethodReturns_Ok() 
+        public async Task GetManyReturns_Ok() 
         {
             //arrange
             Mock<IMovieService> movieService = new Mock<IMovieService>(MockBehavior.Strict);
@@ -37,7 +30,7 @@ namespace Movies.Test
         }
 
         [Fact]
-        public async Task GetMethodReturns_BadRequest()
+        public async Task GetManyReturns_BadRequest()
         {
             //arrange
             Mock<IMovieService> movieService = new Mock<IMovieService>(MockBehavior.Strict);
@@ -49,6 +42,36 @@ namespace Movies.Test
             //assert
             var result = await Assert.ThrowsAsync<BusinessException>(() => controller.Get(new PageParams() { FilterByType = "Wrong" }));
             Assert.True(result is BusinessException);
+        }
+
+        [Fact]
+        public async Task GetReturns_Ok()
+        {
+            //arrange
+            Mock<IMovieService> movieService = new Mock<IMovieService>(MockBehavior.Strict);
+            Mock<IMapper> mappingService = new Mock<IMapper>();
+            movieService.Setup(p => p.GetMovie(It.IsAny<string>())).ReturnsAsync(new Movie());
+            var controller = new MovieController(movieService.Object, mappingService.Object);
+            //act;
+
+            //assert
+            var result = await controller.Get(string.Empty);
+            Assert.True(result is OkObjectResult);
+        }
+
+        [Fact]
+        public async Task GetReturns_NotFound()
+        {
+            //arrange
+            Mock<IMovieService> movieService = new Mock<IMovieService>(MockBehavior.Strict);
+            Mock<IMapper> mappingService = new Mock<IMapper>();
+            movieService.Setup(p => p.GetMovie(It.IsAny<string>())).ReturnsAsync((Movie)null);
+            var controller = new MovieController(movieService.Object, mappingService.Object);
+            //act;
+
+            //assert
+            var result = await controller.Get(string.Empty);
+            Assert.True(result is NotFoundObjectResult);
         }
     }
 }

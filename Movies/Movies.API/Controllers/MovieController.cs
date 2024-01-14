@@ -22,10 +22,21 @@ namespace Movies.API.Controllers
 
         [HttpGet]
         [Produces(typeof(List<MovieViewModel>))]
-        public async Task<ActionResult> Get([FromQuery]PageParams pageParams)
+        public async Task<IActionResult> Get([FromQuery]PageParams pageParams)
         {
             var movies = await _movieService.GetMovies(pageParams);
             return Ok(_mapper.Map<List<MovieViewModel>>(movies));
+        }
+
+        [HttpGet("{title}")]
+        public async Task<IActionResult> Get(string title)
+        {
+            var movie = await _movieService.GetMovie(title);
+            if(movie == null)
+                return NotFound("Not Found.");
+
+            return Ok(_mapper.Map<MovieViewModel>(movie));
+
         }
     }
 }
