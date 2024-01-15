@@ -31,7 +31,7 @@ namespace Movies.Application.Services
                 throw new BusinessException((int)HttpStatusCode.BadRequest, "Order by is not valid.");
 
             var orderbByPredicate = PredicateHelper.BuildPredicate(pageParams.OrderBy, "Desc");
-            if (!string.IsNullOrEmpty(pageParams.FilterByType) && !string.IsNullOrEmpty(pageParams.Filter))
+            if (!string.IsNullOrEmpty(pageParams.FilterByType) || !string.IsNullOrEmpty(pageParams.Filter))
             {
                 if (!PredicateHelper.IsValidColumn(pageParams.FilterByType))
                     throw new BusinessException((int)HttpStatusCode.BadRequest, "Filer is not valid.");
