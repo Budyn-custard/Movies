@@ -1,0 +1,55 @@
+﻿body {
+    background-color: black!important;
+    color: white;
+    font-family: 'Arial', sans-serif;
+}
+
+h3 {
+    color: yellow;
+}
+
+.table {
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 5px;
+    border: 1px solid white;
+    color: white;
+    width: 100%;
+}
+
+.table th {
+    background-color: transparent;
+    color: yellow;
+    border-bottom: 2px solid yellow;
+}
+
+.table td {
+    background-color: transparent;
+    border-bottom: 1px solid white;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    background-color: yellow;
+    color: black;
+    border: none;
+    padding: 5px 10px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.pagination button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+.pagination span {
+    font-size: 16px;
+    margin: 0 10px;
+    color: yellow;
+}
