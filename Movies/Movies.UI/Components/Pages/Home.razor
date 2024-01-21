@@ -1,0 +1,92 @@
+﻿@page "/"
+
+@using Movies.Models.ViewModels
+<h1>Test</h1>
+<h3>Movie List</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Release Date</th>
+            <th>Overview</th>
+            <th>Popularity</th>
+            <th>Vote Count</th>
+            <th>Vote Average</th>
+            <th>Original Language</th>
+            <th>Poster</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var movie in movies)
+        {
+            <tr>
+                <td>@movie.Title</td>
+                <td>@movie.Genre</td>
+                <td>@movie.ReleaseDate?.ToShortDateString()</td>
+                <td>@movie.Overview</td>
+                <td>@movie.Popularity</td>
+                <td>@movie.VoteCount</td>
+                <td>@movie.VoteAverage</td>
+                <td>@movie.OriginalLanguage</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(movie.PosterUrl))
+                    {
+                        <img src="@movie.PosterUrl" alt="Poster" width="100" />
+                    }
+                    else
+                    {
+                        <div>n/a</div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="pagination">
+    <button @onclick="LoadPreviousPage">Previous</button>
+    <span>Page @currentPage</span>
+    <button @onclick="LoadNextPage">Next</button>
+</div>
+@code {
+    private readonly HttpClient httpClient = new HttpClient();
+
+    List<MovieViewModel> movies = new List<MovieViewModel>();
+    int take = 10; 
+    int skip = 0; 
+    int currentPage = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadMovies();
+    }
+
+    private async Task LoadMovies()
+    {
+        var response = await httpClient.GetFromJsonAsync<List<MovieViewModel>>(
+            $"https://localhost:7028/Movie?Take={take}&Skip={skip}");
+
+        if (response != null)
+        {
+            movies = response;
+        }
+    }
+
+    private async Task LoadNextPage()
+    {
+        skip += take;
+        currentPage++;
+        await LoadMovies();
+    }
+
+    private async Task LoadPreviousPage()
+    {
+        if (skip >= take)
+        {
+            skip -= take;
+            currentPage--;
+            await LoadMovies();
+        }
+    }
+}
