@@ -20,7 +20,7 @@ namespace Movies.Test
             Mock<IMovieService> movieService = new Mock<IMovieService>(MockBehavior.Strict);
             Mock<IMapper> mappingService = new Mock<IMapper>();
             movieService.Setup(p => p.GetMovies(It.IsAny<PageParams>())).ReturnsAsync(new List<Movie>());
-            var controller = new MovieController(movieService.Object, mappingService.Object);
+            var controller = new MoviesController(movieService.Object, mappingService.Object);
             //act
             var result = await controller.Get(new PageParams());
 
@@ -36,7 +36,7 @@ namespace Movies.Test
             Mock<IMovieService> movieService = new Mock<IMovieService>(MockBehavior.Strict);
             Mock<IMapper> mappingService = new Mock<IMapper>();
             movieService.Setup(p => p.GetMovies(It.IsAny<PageParams>())).Throws(new BusinessException((int)HttpStatusCode.BadRequest, ""));
-            var controller = new MovieController(movieService.Object, mappingService.Object);
+            var controller = new MoviesController(movieService.Object, mappingService.Object);
             //act;
 
             //assert
@@ -51,7 +51,7 @@ namespace Movies.Test
             Mock<IMovieService> movieService = new Mock<IMovieService>(MockBehavior.Strict);
             Mock<IMapper> mappingService = new Mock<IMapper>();
             movieService.Setup(p => p.GetMovie(It.IsAny<string>())).ReturnsAsync(new Movie());
-            var controller = new MovieController(movieService.Object, mappingService.Object);
+            var controller = new MoviesController(movieService.Object, mappingService.Object);
             //act;
 
             //assert
@@ -66,7 +66,7 @@ namespace Movies.Test
             Mock<IMovieService> movieService = new Mock<IMovieService>(MockBehavior.Strict);
             Mock<IMapper> mappingService = new Mock<IMapper>();
             movieService.Setup(p => p.GetMovie(It.IsAny<string>())).ReturnsAsync((Movie)null);
-            var controller = new MovieController(movieService.Object, mappingService.Object);
+            var controller = new MoviesController(movieService.Object, mappingService.Object);
             //act;
 
             //assert
