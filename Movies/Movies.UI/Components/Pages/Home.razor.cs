@@ -37,7 +37,6 @@ namespace Movies.UI.Components.Pages
             isLoading = true;
             var apiUrl = $"{_configuration.GetSection("MovieApiUrl").Value}?Take={take}&Skip={skip}&Filter={filterValue}&FilterByType={selectedProperty}";
 
-            // Call the API to load movies with filters
             var response = await _httpClient.GetFromJsonAsync<List<MovieViewModel>>(apiUrl);
 
             if (response != null)
