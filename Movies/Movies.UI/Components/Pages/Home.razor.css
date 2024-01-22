@@ -1,5 +1,5 @@
 ﻿body {
-    background-color: black!important;
+    background-color: black !important;
     color: white;
     font-family: 'Arial', sans-serif;
 }
@@ -16,16 +16,16 @@ h3 {
     width: 100%;
 }
 
-.table th {
-    background-color: transparent;
-    color: yellow;
-    border-bottom: 2px solid yellow;
-}
+    .table th {
+        background-color: transparent;
+        color: yellow;
+        border-bottom: 2px solid yellow;
+    }
 
-.table td {
-    background-color: transparent;
-    border-bottom: 1px solid white;
-}
+    .table td {
+        background-color: transparent;
+        border-bottom: 1px solid white;
+    }
 
 .pagination {
     display: flex;
@@ -33,23 +33,100 @@ h3 {
     margin-top: 20px;
 }
 
-.pagination button {
-    background-color: yellow;
-    color: black;
-    border: none;
+    .pagination button {
+        background-color: yellow;
+        color: black;
+        border: none;
+        padding: 5px 10px;
+        margin: 0 5px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+        .pagination button:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+
+    .pagination span {
+        font-size: 16px;
+        margin: 0 10px;
+        color: yellow;
+    }
+
+#takeDropdown {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #FFD700; /* Gold border */
+    padding: 5px;
+    font-size: 14px;
+}
+
+    #takeDropdown option {
+        background-color: #000;
+        color: #fff;
+        font-size: 14px;
+    }
+
+    #takeDropdown:hover {
+        border: 1px solid #FFD700; /* Gold border on hover */
+        cursor: pointer;
+    }
+
+.filter-form {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+    .filter-form label {
+        color: #fff;
+        margin-right: 1rem;
+        font-weight: bold;
+    }
+
+#propertyDropdown {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #FFD700; /* Gold border */
+    padding: 5px;
+    font-size: 14px;
+}
+
+    #propertyDropdown option {
+        background-color: #000;
+        color: #fff;
+        font-size: 14px;
+    }
+
+    #propertyDropdown:hover {
+        border: 1px solid #FFD700; /* Gold border on hover */
+        cursor: pointer;
+    }
+
+#filterValue {
+    background-color: #000;
+    color: #fff;
+    border: 1px solid #FFD700; /* Gold border */
+    padding: 5px;
+    font-size: 14px;
+}
+
+    #filterValue:hover {
+        border: 1px solid #FFD700; /* Gold border on hover */
+        cursor: text;
+    }
+
+button {
+    background-color: #000;
+    color: #FFD700; /* Gold text color */
+    border: 1px solid #FFD700; /* Gold border */
     padding: 5px 10px;
-    margin: 0 5px;
+    font-size: 14px;
     cursor: pointer;
-    border-radius: 5px;
 }
 
-.pagination button:disabled {
-    background-color: gray;
-    cursor: not-allowed;
-}
-
-.pagination span {
-    font-size: 16px;
-    margin: 0 10px;
-    color: yellow;
-}
+    button:hover {
+        background-color: #FFD700; /* Gold background color on hover */
+        color: #000;
+    }

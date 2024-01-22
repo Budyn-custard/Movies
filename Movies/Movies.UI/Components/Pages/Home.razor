@@ -3,7 +3,26 @@
 @using Movies.Models.ViewModels
 <h1>Test</h1>
 <h3>Movie List</h3>
+<label for="takeDropdown">Show:</label>
+<select id="takeDropdown" @onchange="UpdateTakeValue">
+    <option value="10">10 per page</option>
+    <option value="20">20 per page</option>
+    <option value="30">30 per page</option>
+</select>
+<div class="filter-form">
+    <label for="propertyDropdown">Filter by Property:</label>
+    <select id="propertyDropdown" @bind="selectedProperty">
+        @foreach (var property in GetMovieViewModelProperties())
+        {
+            <option value="@property">@property</option>
+        }
+    </select>
 
+    <label for="filterValue">Filter Value:</label>
+    <input type="text" id="filterValue" @bind="filterValue" />
+
+    <button @onclick="ApplyFilter">Apply Filter</button>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -56,16 +75,41 @@
     int take = 10; 
     int skip = 0; 
     int currentPage = 1;
+    int selectedTakeValue = 10;
+    string selectedProperty { get; set; } = "Title";
+    string filterValue { get; set; } = "";
 
     protected override async Task OnInitializedAsync()
     {
         await LoadMovies();
     }
 
+    private IEnumerable<string> GetMovieViewModelProperties()
+    {
+        // Use reflection to get the property names from MovieViewModel
+        var propertyNames = typeof(MovieViewModel).GetProperties()
+            .Select(propertyInfo => propertyInfo.Name);
+
+        return propertyNames;
+    }
+
+    private async Task ApplyFilter()
+    {
+        var apiUrl = $"https://localhost:7028/Movies?Take={take}&Skip={skip}&Filter={filterValue}&FilterByType={selectedProperty}";
+
+        // Call the API to load movies with filters
+        var response = await httpClient.GetFromJsonAsync<List<MovieViewModel>>(apiUrl);
+
+        if (response != null)
+        {
+            movies = response;
+        }
+    }
+
     private async Task LoadMovies()
     {
         var response = await httpClient.GetFromJsonAsync<List<MovieViewModel>>(
-            $"https://localhost:7028/Movie?Take={take}&Skip={skip}");
+            $"https://localhost:7028/Movies?Take={take}&Skip={skip}");
 
         if (response != null)
         {
@@ -88,5 +132,14 @@
             currentPage--;
             await LoadMovies();
         }
+    }
+
+    private async Task UpdateTakeValue(ChangeEventArgs e)
+    {
+        selectedTakeValue = int.Parse(e.Value.ToString());
+        take = selectedTakeValue;
+        skip = 0; 
+        currentPage = 1; 
+        await LoadMovies(); 
     }
 }

@@ -9,34 +9,34 @@ namespace Movies.API.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class MovieController : ControllerBase
+    public class MoviesController : ControllerBase
     {
         private readonly IMovieService _movieService;
         private readonly IMapper _mapper;
 
-        public MovieController(IMovieService movieService, IMapper mapper)
+        public MoviesController(IMovieService movieService, IMapper mapper)
         {
-              _movieService = movieService;
+            _movieService = movieService;
             _mapper = mapper;
         }
 
         [HttpGet]
         [Produces(typeof(List<MovieViewModel>))]
-        public async Task<IActionResult> Get([FromQuery]PageParams pageParams)
+        public async Task<IActionResult> Get([FromQuery] PageParams pageParams)
         {
             var movies = await _movieService.GetMovies(pageParams);
             return Ok(_mapper.Map<List<MovieViewModel>>(movies));
         }
 
         [HttpGet("{title}")]
+        [Produces(typeof(MovieViewModel))]
         public async Task<IActionResult> Get(string title)
         {
             var movie = await _movieService.GetMovie(title);
-            if(movie == null)
+            if (movie == null)
                 return NotFound("Not Found.");
 
             return Ok(_mapper.Map<MovieViewModel>(movie));
-
         }
     }
 }
