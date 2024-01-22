@@ -23,123 +23,56 @@
 
     <button @onclick="ApplyFilter">Apply Filter</button>
 </div>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>Release Date</th>
-            <th>Overview</th>
-            <th>Popularity</th>
-            <th>Vote Count</th>
-            <th>Vote Average</th>
-            <th>Original Language</th>
-            <th>Poster</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var movie in movies)
-        {
+@if (isLoading)
+{
+    <LoadingSpinner />
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@movie.Title</td>
-                <td>@movie.Genre</td>
-                <td>@movie.ReleaseDate?.ToShortDateString()</td>
-                <td>@movie.Overview</td>
-                <td>@movie.Popularity</td>
-                <td>@movie.VoteCount</td>
-                <td>@movie.VoteAverage</td>
-                <td>@movie.OriginalLanguage</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(movie.PosterUrl))
-                    {
-                        <img src="@movie.PosterUrl" alt="Poster" width="100" />
-                    }
-                    else
-                    {
-                        <div>n/a</div>
-                    }
-                </td>
+                <th>Title</th>
+                <th>Genre</th>
+                <th>Release Date</th>
+                <th>Overview</th>
+                <th>Popularity</th>
+                <th>Vote Count</th>
+                <th>Vote Average</th>
+                <th>Original Language</th>
+                <th>Poster</th>
             </tr>
-        }
-    </tbody>
-</table>
-<div class="pagination">
-    <button @onclick="LoadPreviousPage">Previous</button>
-    <span>Page @currentPage</span>
-    <button @onclick="LoadNextPage">Next</button>
-</div>
-@code {
-    private readonly HttpClient httpClient = new HttpClient();
+        </thead>
+        <tbody>
+            @foreach (var movie in movies)
+            {
+                <tr>
+                    <td>@movie.Title</td>
+                    <td>@movie.Genre</td>
+                    <td>@movie.ReleaseDate?.ToShortDateString()</td>
+                    <td>@movie.Overview</td>
+                    <td>@movie.Popularity</td>
+                    <td>@movie.VoteCount</td>
+                    <td>@movie.VoteAverage</td>
+                    <td>@movie.OriginalLanguage</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(movie.PosterUrl))
+                        {
+                            <img src="@movie.PosterUrl" alt="Poster" width="100" />
+                        }
+                        else
+                        {
+                            <div>n/a</div>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="pagination">
+        <button @onclick="LoadPreviousPage">Previous</button>
+        <span>Page @currentPage</span>
+        <button @onclick="LoadNextPage">Next</button>
+    </div>
 
-    List<MovieViewModel> movies = new List<MovieViewModel>();
-    int take = 10; 
-    int skip = 0; 
-    int currentPage = 1;
-    int selectedTakeValue = 10;
-    string selectedProperty { get; set; } = "Title";
-    string filterValue { get; set; } = "";
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadMovies();
-    }
-
-    private IEnumerable<string> GetMovieViewModelProperties()
-    {
-        // Use reflection to get the property names from MovieViewModel
-        var propertyNames = typeof(MovieViewModel).GetProperties()
-            .Select(propertyInfo => propertyInfo.Name);
-
-        return propertyNames;
-    }
-
-    private async Task ApplyFilter()
-    {
-        var apiUrl = $"https://localhost:7028/Movies?Take={take}&Skip={skip}&Filter={filterValue}&FilterByType={selectedProperty}";
-
-        // Call the API to load movies with filters
-        var response = await httpClient.GetFromJsonAsync<List<MovieViewModel>>(apiUrl);
-
-        if (response != null)
-        {
-            movies = response;
-        }
-    }
-
-    private async Task LoadMovies()
-    {
-        var response = await httpClient.GetFromJsonAsync<List<MovieViewModel>>(
-            $"https://localhost:7028/Movies?Take={take}&Skip={skip}");
-
-        if (response != null)
-        {
-            movies = response;
-        }
-    }
-
-    private async Task LoadNextPage()
-    {
-        skip += take;
-        currentPage++;
-        await LoadMovies();
-    }
-
-    private async Task LoadPreviousPage()
-    {
-        if (skip >= take)
-        {
-            skip -= take;
-            currentPage--;
-            await LoadMovies();
-        }
-    }
-
-    private async Task UpdateTakeValue(ChangeEventArgs e)
-    {
-        selectedTakeValue = int.Parse(e.Value.ToString());
-        take = selectedTakeValue;
-        skip = 0; 
-        currentPage = 1; 
-        await LoadMovies(); 
-    }
 }
